@@ -3,16 +3,6 @@ import { Schema, model } from "mongoose";
 const cryptoSchema = new Schema({
   crypto: { type: String, required: true },
   product_id: { type: String, required: true },
-  minutes: [
-    {
-      time: { type: Number, required: true },
-      low: { type: Number, required: true },
-      high: { type: Number, required: true },
-      open: { type: Number, required: true },
-      close: { type: Number, required: true },
-      volume: { type: Number, required: true },
-    },
-  ],
 });
 
 cryptoSchema.set("toJSON", {
@@ -22,4 +12,18 @@ cryptoSchema.set("toJSON", {
   },
 });
 
-export const Crypto = model("Crypto", cryptoSchema);
+export const Crypto = model("Cryptos", cryptoSchema);
+
+
+const cryptoDetailsSchema = new Schema({
+  product_id: { type: String, required: true },
+  granularity: { type: Number, required: true },
+  time: { type: Number, required: true },
+  low: { type: Number, required: true },
+  high: { type: Number, required: true },
+  open: { type: Number, required: true },
+  close: { type: Number, required: true },
+  volume: { type: Number, required: true },
+})
+
+export const CryptoDetails = model("CryptoDetails", cryptoDetailsSchema);

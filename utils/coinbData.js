@@ -39,7 +39,7 @@ export const getProcessCandles = async ({ product_id, frdate, todate }) => {
         let [time, low, high, open, close, volume] = candle;
 
         return {
-          time: new Date(time * 1000),
+          time,
           low,
           high,
           open,
