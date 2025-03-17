@@ -5,9 +5,9 @@ import { createCrypto, createLocalCrypto, saveCandles, saveLocalCandles } from "
 
 dotenv.config();
 
-const PRODUCT_ID = "BTC-USDT";
+const PRODUCT_ID = "BTC-USD";
 
-let start = 1742142605966;
+let start = 1717087392502;
 
 /*let res = await createCrypto({
   cryptoName: "Bitcoin",
@@ -23,7 +23,7 @@ let localres = await createLocalCrypto({
 
 console.log(localres);*/
 
-for (let i = 0; i < 100; i++) {
+for (let i = 0; i < 200; i++) {
   await saveData(start)
   await delay(2000)
   start -= 18000000
