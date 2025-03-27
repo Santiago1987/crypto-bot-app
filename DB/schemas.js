@@ -24,6 +24,14 @@ const cryptoDetailsSchema = new Schema({
   open: { type: Number, required: true },
   close: { type: Number, required: true },
   volume: { type: Number, required: true },
-})
+},
+  {
+    toJSON: {
+      transform: (_document, returnedObject) => {
+        delete returnedObject._id;
+        delete returnedObject.__v;
+      },
+    }
+  });
 
 export const CryptoDetails = model("CryptoDetails", cryptoDetailsSchema);

@@ -6,6 +6,7 @@ export const getCandlesFromCoinbase = async ({
   product_id,
   frdate,
   todate,
+  granu
 }) => {
   let config = {
     method: "get",
@@ -15,7 +16,7 @@ export const getCandlesFromCoinbase = async ({
       "Content-Type": "application/json",
     },
     params: {
-      granularity: 60,
+      granularity: granu,
       start: frdate,
       end: todate,
     },
@@ -32,8 +33,8 @@ export const getCandlesFromCoinbase = async ({
     });
 };
 
-export const getProcessCandles = async ({ product_id, frdate, todate }) => {
-  return getCandlesFromCoinbase({ product_id, frdate, todate })
+export const getProcessCandles = async ({ product_id, frdate, todate, granu }) => {
+  return getCandlesFromCoinbase({ product_id, frdate, todate, granu })
     .then((data) => {
       return data.map((candle) => {
         let [time, low, high, open, close, volume] = candle;

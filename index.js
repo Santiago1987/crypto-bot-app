@@ -1,71 +1,22 @@
-import { getProcessCandles } from "./utils/coinbData.js";
-import dotenv from "dotenv";
-import { getMongoConnection } from "./DB/mongo.js";
-import { createCrypto, createLocalCrypto, saveCandles, saveLocalCandles } from "./DB/DBData.js";
-
+import express from 'express';
+import { getMongoConnection } from './DB/mongo.js';
+import { CryptoDetails } from './DB/schemas.js';
+import dotenv from 'dotenv';
 dotenv.config();
 
-const PRODUCT_ID = "BTC-USD";
+const app = express();
 
-let start = 1717087392502;
+const PORT = process.env.PORT || 3000;
 
-/*let res = await createCrypto({
-  cryptoName: "Bitcoin",
-  product_id: PRODUCT_ID
+app.get("/:ticket/:granularity", async (req, res) => {
+    let { ticket, granularity } = req.params;
+    let DBConnection = await getMongoConnection();
+    let candles = await CryptoDetails.find({ product_id: ticket, granularity: parseInt(granularity) });
+    res.json(candles);
+    await DBConnection.connection.close();
 });
 
-console.log(res);
 
-let localres = await createLocalCrypto({
-  cryptoName: "Bitcoin",
-  product_id: PRODUCT_ID
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
-
-console.log(localres);*/
-
-for (let i = 0; i < 200; i++) {
-  await saveData(start)
-  await delay(2000)
-  start -= 18000000
-}
-
-function delay(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-async function saveData(start) {
-  let todate = start
-  let frdate = start - 18000000
-
-  let candleList = await getProcessCandles({
-    product_id: PRODUCT_ID,
-    frdate,
-    todate
-  })
-
-  let response = await saveCandles({
-    product_id: PRODUCT_ID,
-    granularity: 60,
-    candles: candleList
-  })
-
-  let localResponse = await saveLocalCandles({
-    product_id: PRODUCT_ID,
-    granularity: 60,
-    candles: candleList
-  })
-
-  console.log("SAVED", response, localResponse, new Date(start).toISOString(), start)
-}
-
-process.exit(0)
-
-//await DBConnection.connection.close();
-
-/*console.log(new Date("2025-03-14T12:00:00Z").getTime());
-console.log(new Date("2025-03-14T17:00:00Z").getTime());
-console.log(
-  new Date("2025-03-14T17:00:00Z").getTime() -
-  new Date("2025-03-14T12:00:00Z").getTime()
-);*/
-
-//console.log(new Date(1741953600000).toISOString());
